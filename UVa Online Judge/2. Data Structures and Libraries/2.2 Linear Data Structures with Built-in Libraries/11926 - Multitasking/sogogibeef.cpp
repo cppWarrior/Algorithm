@@ -1,27 +1,23 @@
-
 // Jeong-Min Lim (limjeongmin@wustl.edu)
 
 //#include <bits/stdc++.h>
 #include "/Users/jeongminlim/stdc++.h"
 
 using namespace std;
-int n, m;
-int oB, oE;
-int rB, rE, rI;
+int n, m, s, e, r;
 bitset<1000050> calendar;
-bool conflicting = false;
+bool conflict = false;
 
 void overlap(int begin, int end) {
     for (int i = begin; i < end; i++) {
         if (calendar[i] == true) {
-            conflicting = true;
+            conflict = true;
             return;
         }
         calendar.set(i, true);
     }
-    conflicting = false;
+    conflict = false;
     return;
-
 }
 
 
@@ -33,45 +29,33 @@ int main() {
     ios_base::sync_with_stdio(0);
     //code here
     cin >> n >> m;
-
-    while (n != 0 || m != 0) {
+    while (!(n == 0 && m == 0)) {
         calendar.reset();
-        conflicting = false;
-
-        for (int o = 0; o < n; o++) {
-            cin >> oB >> oE;
-            overlap(oB, oE);
+        conflict = false;
+        for (int i = 0; i < n; i++) {
+            cin >> s >> e;
+            overlap(s, e);
         }
 
-
-        for (int r = 0; r < m; r++) {
-            cin >> rB >> rE >> rI;
-            while (rB < 1000000 && !conflicting) {
-                overlap(rB, rE);
-                rB += rI;
-                rE += rI;
-                if (rE > 1000000) {
-                    rE = 1000000;
-                }
+        for (int i = 0; i < m; i++) {
+            cin >> s >> e >> r;
+            while (s < 1000000 && !conflict) {
+                overlap(s, e);
+                s += r;
+                e = min(e + r, 1000000);
             }
         }
 
-
-        if (conflicting) {
-            cout << "CONFLICT\n";
-        } else {
-            cout << "NO CONFLICT\n";
-        }
-
+        if (conflict) cout << "CONFLICT\n";
+        else cout << "NO CONFLICT\n";
         cin >> n >> m;
+
 
     }
 
 
     return 0;
 }
-
-
 
 
 
