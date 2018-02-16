@@ -1,0 +1,54 @@
+// 11136.cpp : 콘솔 응용 프로그램에 대한 진입점을 정의합니다.
+//
+
+// using multi-set
+
+#include "stdafx.h"
+#include <stdio.h>
+#include <iostream>
+#include <set>
+#include <algorithm>
+using namespace std;
+int main()
+{
+	multiset<int> v;
+	multiset<int>::iterator it1, it2;
+	int n; long long sum;
+	//freopen("test.txt", "r", stdin);
+	while (1) {
+		scanf("%d", &n);
+		if (n == 0) break;
+		sum = 0;
+		v.clear();
+		for (int i = 0; i < n; i++) {
+			int a; scanf("%d", &a);
+			for (int j = 0; j < a; j++) {
+				int bills; scanf("%d", &bills);
+				v.insert(bills);
+			}
+			int vsize = v.size();
+			int n1, n2;
+
+			if (vsize <= 1) { // 사실 이거 필요 없음.
+				n2 = 0;
+				n1 = 0;
+				if (vsize == 1) v.erase(v.begin());
+			}
+			else {
+				it2 = v.end();
+				it2--;
+				it1 = v.begin();
+				n2 = *it2; n1 = *it1;
+				v.erase(it1);
+				v.erase(it2);
+			}
+			sum += (n2 - n1);
+			//cout << "sum = " << sum << "\n";
+		}
+		printf("%lld\n", sum);
+	}
+
+	system("pause");
+    return 0;
+}
+
