@@ -4,29 +4,19 @@
 #include "/Users/jeongminlim/stdc++.h"
 
 using namespace std;
+
 string line;
-int n;
 char L;
-int a, b, c;
-bool contestants[101];
+bool contestants[110];
+bool solved[110][15];
+
+int n, a, b, c;
+int t[110];
+int attempt[110][15];
+int corrects[110];
+
 tuple<int, int, int> q;
 vector<tuple<int, int, int>> judge;
-bool solved[101][10];
-bool tried[101][10];
-
-int times[101];
-int attempt[101][10];
-int corrects[101];
-int count;
-
-
-int sumArray(int k[]) {
-    int sum = 0;
-    for (int i = 0; i < sizeof(k); i++) {
-        sum += k[i];
-    }
-    return sum;
-}
 
 
 int main() {
@@ -41,12 +31,9 @@ int main() {
     cin.ignore();
 
     while (n--) {
-
-
         memset(contestants, 0, sizeof(contestants));
-        memset(times, 0, sizeof(times));
+        memset(t, 0, sizeof(t));
         memset(solved, 0, sizeof(solved));
-        memset(tried, 0, sizeof(tried));
         memset(attempt, 0, sizeof(attempt));
         memset(corrects, 0, sizeof(corrects));
         judge.clear();
@@ -60,49 +47,49 @@ int main() {
             istringstream iss(line);
 
             iss >> a >> b >> c >> L;
-
-            if (L == 'R' || L == 'U' || L == 'E') {
-                continue;
-            }
-
-
             contestants[a] = true;
 
-            if (L == 'C') {
-                solved[a][b] = true;
-                tried[a][b] = true;
-                times[a] += c;
-                corrects[a]++;
+            if (L == 'R' || L == 'E' || L == 'U') {
+                continue;
+
+            } else if (L == 'C') {
+                if (solved[a][b]) {
+                    continue;
+                } else {
+                    solved[a][b] = true;
+                    t[a] = t[a] + c + attempt[a][b];
+                    corrects[a]++;
+                }
+
             } else if (L == 'I') {
                 attempt[a][b] += 20;
-                tried[a][b] = true;
             }
+
 
         }
 
-        for (int i = 0; i < 100; i++) {
-            if (contestants[i] && tried[i]) { // WIP
-                q = make_tuple(corrects[i], -(times[i] + sumArray(attempt[i])), i);
+
+        for (int i = 1; i <= 100; i++) {
+            if (contestants[i]) {
+                q = make_tuple(-corrects[i], (t[i]), i);
                 judge.push_back(q);
             }
         }
 
-        if(!judge.empty()){
-            sort(judge.begin(), judge.end());
+        sort(judge.begin(), judge.end());
 
-            for (int i = judge.size() - 1; i >= 0; i--) {
-                cout << get<2>(judge[i]) << " " << get<0>(judge[i]) << " " << -get<1>(judge[i]) << "\n";
-            }
+
+        for (int i = 0; i < judge.size(); i++) {
+            cout << get<2>(judge[i]) << " "
+                 << -get<0>(judge[i]) << " "
+                 << get<1>(judge[i]) << "\n";
         }
 
-        cout << "\n";
-
+        if (n > 0) cout << "\n";
     }
-
     return 0;
 
 }
-
 
 
 
