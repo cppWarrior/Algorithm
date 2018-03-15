@@ -8,6 +8,7 @@ using namespace std;
 
 int m, n;
 int p[110], f[110];
+//int d[400400][110];
 int d1[10500]; // m의 값이 사실상 10200까지인데 10100까지만 잡아서 에러가 났었음
 int refunded;
 
@@ -20,6 +21,26 @@ void pay(int M, int N) {
         }
     }
     return;
+}
+
+int d2[110][2];
+
+
+int buy(int i, int c) {
+    if ((c > m && c > m + 200) || (c < 1800 && c > m)) {
+        return -10;
+    }
+    if (i == n) {
+        if (c > m && c <= 2000) {
+            return -10;
+        }
+        return 0;
+    }
+    if (d2[i][c] != -1) {
+        return d2[i][c];
+    }
+    return d2[i][c] = max(buy(i + 1, c), buy(i + 1, c + p[i]) + f[i]);
+
 }
 
 
